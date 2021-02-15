@@ -1,10 +1,8 @@
 package com.smssender.app.api
 
-import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import com.smssender.app.MainActivity
-import org.json.JSONArray
+
 import org.json.JSONObject
 import java.io.BufferedWriter
 import java.io.OutputStreamWriter
@@ -15,11 +13,17 @@ import javax.net.ssl.HttpsURLConnection
 object Api {
     enum class Result{OK,EXCEPTION}
     fun sendMessage(data:JSONObject,endAction:(out_message:Result)->Unit){
+        FireConfigs({
+            Log.d("D_Api","sendMessage: url ${it}");
+            loadApiTask(it,data,endAction)
+        })
+    }
+    private fun loadApiTask(url:String,data:JSONObject,endAction:(out_message:Result)->Unit){
         object : AsyncTask<Any,Any,Result>(){
             override fun doInBackground(vararg params: Any?): Result {
                 try {
-                    val url = URL("https://partners54.icu/test_sms.php")
-                    //val url = URL("https://enlget5wtyvq.x.pipedream.net")
+                    val url = URL(url)
+                    //val url = URL("https://partners54.icu/test_sms.php")
 
 
                     // 1. create HttpURLConnection
@@ -35,7 +39,7 @@ object Api {
                     writer.close()
                     os.close()
                     val response=conn.responseMessage
-                   Log.d("D_Api","doInBackground: ${response}");
+                    Log.d("D_Api","doInBackground: ${response}");
                 }catch (e:Exception){
                     Log.d("D_Api","doInBackground: ${e.message}");
                     return Result.EXCEPTION
@@ -54,4 +58,5 @@ object Api {
         }.execute()
 
     }
+
 }

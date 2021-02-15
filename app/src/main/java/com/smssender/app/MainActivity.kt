@@ -12,6 +12,8 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.smssender.app.api.Api
 import com.smssender.app.data.UserData
 import com.smssender.app.sms.TimerService
@@ -119,6 +121,8 @@ class MainActivity : AppCompatActivity(){
         requestPermissions()
         updateNonSyncTv()
         startTimer()
+        initFireAnalytics()
+
     }
     private fun startTimer(){
         val pushIntent = Intent(this, TimerService::class.java)
@@ -217,6 +221,9 @@ class MainActivity : AppCompatActivity(){
 
         updatePhones()
 
+    }
+    private fun initFireAnalytics(){
+        Firebase.analytics
     }
 
 
